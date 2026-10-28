@@ -1,14 +1,3 @@
 {
-  "terminal.integrated.env.windows": {
-    "JAVA_HOME": "${env:USERPROFILE}\\.jdks\\jdk-25.0.4.1+1",
-    "PATH": "${env:USERPROFILE}\\.jdks\\jdk-25.0.4.1+1\\bin;${env:PATH}"
-  },
-  "java.configuration.runtimes": [
-    {
-      "name": "JavaSE-25",
-      "path": "C:\\Users\\Admin\\.jdks\\jdk-25.0.4.1+1",
-      "default": true
-    }
-  ],
   "java.configuration.updateBuildConfiguration": "interactive"
 }
