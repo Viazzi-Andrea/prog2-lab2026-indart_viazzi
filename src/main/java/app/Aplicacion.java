@@ -1,5 +1,6 @@
 package app;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import controlador.ControladorRegistros;
 import fachada.FachadaRegistros;
 import java.nio.file.Path;
@@ -9,6 +10,7 @@ import vista.VentanaPrincipal;
 
 public class Aplicacion {
     public static void main(String[] args) {
+        FlatLightLaf.setup();
         SwingUtilities.invokeLater(() -> {
             PersistenciaRegistros persistencia =
                     new PersistenciaRegistros(Path.of("datos", "registros.json"));
