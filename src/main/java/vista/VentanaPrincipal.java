@@ -173,7 +173,93 @@ public class VentanaPrincipal extends JFrame {
     public void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
+    public String getIdentificador() {
+        return campoIdentificador.getText().trim();
+    }
 
+    public String getNombre() {
+        return campoNombre.getText().trim();
+    }
+
+    public String getCategoria() {
+        return (String) comboCategoria.getSelectedItem();
+    }
+
+    public boolean isActivo() {
+        return casillaActivo.isSelected();
+    }
+
+    public String getEstado() {
+        if (radioPrestado.isSelected()) {
+            return "Prestado";
+        }
+        if (radioReparacion.isSelected()) {
+            return "En reparación";
+        }
+        return "Disponible";
+    }
+
+    public int getDiasPrestamo() {
+        return (Integer) spinnerDias.getValue();
+    }
+
+    public String getObservaciones() {
+        return areaObservaciones.getText().trim();
+    }
+
+    public String getTextoBusqueda() {
+        return campoBusqueda.getText().trim();
+    }
+        public void cargarFormulario(int identificador, String nombre, String categoria,
+            boolean activo, String estado, int diasPrestamo, String observaciones) {
+        campoIdentificador.setText(String.valueOf(identificador));
+        campoNombre.setText(nombre);
+        comboCategoria.setSelectedItem(categoria);
+        casillaActivo.setSelected(activo);
+        seleccionarEstado(estado);
+        spinnerDias.setValue(diasPrestamo);
+        areaObservaciones.setText(observaciones);
+    }
+
+    private void seleccionarEstado(String estado) {
+        if ("Prestado".equals(estado)) {
+            radioPrestado.setSelected(true);
+        } else if ("En reparación".equals(estado)) {
+            radioReparacion.setSelected(true);
+        } else {
+            radioDisponible.setSelected(true);
+        }
+    }
+
+    public void limpiarFormulario() {
+        campoIdentificador.setText("");
+        campoNombre.setText("");
+        comboCategoria.setSelectedIndex(0);
+        casillaActivo.setSelected(true);
+        radioDisponible.setSelected(true);
+        spinnerDias.setValue(1);
+        areaObservaciones.setText("");
+        tablaRegistros.clearSelection();
+        campoIdentificador.requestFocusInWindow();
+    }
+        public int getIdentificadorSeleccionado() {
+        int fila = tablaRegistros.getSelectedRow();
+        if (fila == -1) {
+            return -1;
+        }
+        int filaModelo = tablaRegistros.convertRowIndexToModel(fila);
+        return (Integer) modeloTabla.getValueAt(filaModelo, 0);
+    }
+
+    public boolean confirmarEliminacion(String nombre) {
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Seguro que querés eliminar \"" + nombre + "\"?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+        return respuesta == JOptionPane.YES_OPTION;
+    }
+    
     public JTextField getCampoIdentificador() {
         return campoIdentificador;
     }
