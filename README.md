@@ -1,13 +1,13 @@
-# [Pendiente: nombre del proyecto]
+# Gestor de Préstamos del Aula de Informática
 
 Trabajo de Programación 2 del CeRP del Suroeste, modalidad semipresencial.
 Docente: Domingo Pérez. Año: 2026.
 
 ## Integrantes
 
-- [Pendiente: nombre completo del primer integrante].
-- [Pendiente: nombre completo del segundo integrante].
-- [Solo si corresponde: nombre completo del tercer integrante].
+- Mateo Indart Vega.
+- Andrea Viazzi Moreira.
+
 
 ## Estado del proyecto
 
@@ -25,51 +25,85 @@ detalla los requisitos.
 
 ## Problema y destinatarios
 
-**Pendiente de definir:** qué problema abordamos, en qué contexto se presenta
-y quiénes utilizarán la aplicación.
+En un centro de educación media, el aula de informática concentra equipamiento que se comparte entre muchos docentes y grupos: notebooks, proyectores y kits de robótica, además del propio espacio del aula.
+
+La gestión de ese equipamiento suele resolverse de manera informal: un cuaderno en la puerta, un mensaje al referente del aula o un acuerdo verbal entre colegas.
+Ese mecanismo produce cuatro problemas recurrentes:
+
+- No se sabe con certeza qué recursos están disponibles en un momento dado.
+- No queda registro de qué equipo salió, ni desde cuándo.
+- Un equipo que se rompió sigue figurando como prestable hasta que alguien avisa.
+- El aula se superpone entre grupos porque no hay un único lugar donde consultarlo.
+
+**Destinatario directo:** el docente referente o encargado del aula de
+informática, que es quien administra el inventario y autoriza los préstamos.
+
+**Destinatarios indirectos:** los docentes que solicitan equipamiento para sus
+clases y el equipo de dirección, que necesita conocer el estado del inventario
+para planificar reparaciones y reposiciones.
 
 ## Utilidad de la solución
 
-**Pendiente de fundamentar:** qué tareas facilitará el sistema y qué ventajas
-ofrecerá a sus destinatarios.
+La aplicación reemplaza el registro informal por un inventario único y consultable, y aporta concretamente lo siguiente:
+
+- **Estado explícito de cada recurso.** Cada equipo indica si está Disponible, Prestado o En reparación, de modo que la consulta no depende de la memoria de quien atiende.
+- **Préstamos acotados en el tiempo.** El plazo se registra en días, con un máximo definido, lo que evita los préstamos indefinidos que en la práctica terminan en equipos extraviados.
+- **Trazabilidad del deterioro.** El campo de observaciones permite anotar roturas, faltantes o condiciones particulares de cada recurso, información que en el registro en papel se pierde.
+- **Conservación entre sesiones.** Los datos se guardan en un archivo JSON y se recuperan al volver a abrir la aplicación.
+- **Funcionamiento autónomo.** No requiere conexión a internet, servidor ni base de datos: se ejecuta en la propia computadora del aula, condición necesaria en centros con conectividad intermitente.
 
 ## Adaptación del modelo y reglas
 
-El modelo inicial contiene registros con identificador, nombre, categoría y
-estado activo.
+El prototipo entregado gestionaba registros genéricos con cuatro atributos. La adaptación consistió en reinterpretar esos atributos y agregar tres propios del problema.
 
-**Pendiente de implementar y documentar:** qué representará un registro en
-nuestro proyecto, qué atributos agregaremos o cambiaremos y cuáles serán las
-categorías y operaciones propias del problema.
+### Reinterpretación de los atributos del prototipo
 
-| Validación requerida | Regla de nuestro proyecto | Estado |
-| --- | --- | --- |
-| Primera validación | Pendiente de definir. | Sin implementar. |
-| Segunda validación | Pendiente de definir. | Sin implementar. |
-| Tercera validación, propia del problema | Pendiente de definir. | Sin implementar. |
+| Atributo del prototipo | Significado en este sistema |
+| `identificador` | Número de inventario del recurso. Único y no reutilizable. |
+| `nombre` | Denominación del recurso (por ejemplo, "Notebook Lenovo 03"). |
+| `categoria` | Tipo de recurso. |
+| `activo` | Indica si el recurso sigue dado de alta en el inventario. Un equipo dado de baja conserva su historial pero deja de ofrecerse. |
 
-También falta implementar el identificador único, la selección y modificación,
-la eliminación con confirmación, la búsqueda, la limpieza del formulario y la
-actualización del listado. La lectura y escritura JSON están disponibles como
-infraestructura; falta integrar el guardado con las operaciones.
+### Atributos agregados por el equipo
+
+| Atributo | Tipo | Función |
+| `estado` | `String` | Situación actual del recurso: Disponible, Prestado o En reparación. |
+| `diasPrestamo` | `int` | Plazo del préstamo, acotado entre 1 y 15 días. |
+| `observaciones` | `String` | Texto libre para registrar roturas, faltantes o condiciones de uso. |
+
+### Categorías definidas
+
+Notebook, Proyector, Kit de robótica y Aula.
+
+La inclusión de **Aula** como categoría es una decisión de diseño deliberada:
+trata el espacio físico como un recurso más del inventario. De ese modo, reservar el aula para un grupo recorre exactamente el mismo circuito que prestar un proyector, sin duplicar lógica ni pantallas.
+
+### Reglas de validación
+
+1. **Nombre obligatorio.** No se admite un recurso sin denominación, porque el listado quedaría inutilizable.
+2. **Identificador único.** No se permite registrar dos recursos con el mismo número de inventario.
+3. **Un recurso en reparación no puede prestarse.** Esta es la regla propia del problema: evita asignar equipamiento que no está en condiciones de uso.
+4. **Plazo acotado.** El préstamo debe ubicarse entre 1 y 15 días.
+
+---
 
 ## Componentes gráficos
 
-La base incluye JTextField, JComboBox, JCheckBox, JButton y JTable.
-JLabel y los contenedores de apoyo no cuentan para alcanzar el mínimo solicitado.
+La base incluye JTextField, JComboBox, JCheckBox, JButton y JTable. El equipo agregó tres tipos más, todos con
+incidencia real sobre los datos.
 
 Los tres tipos nuevos todavía no fueron elegidos ni implementados:
 
-| Componente nuevo | Dato o acción real que permitirá gestionar | Estado |
-| --- | --- | --- |
-| Pendiente de elegir. | Pendiente de definir. | Sin implementar. |
-| Pendiente de elegir. | Pendiente de definir. | Sin implementar. |
-| Pendiente de elegir. | Pendiente de definir. | Sin implementar. |
+| Componente | Función en el sistema 
+| `JRadioButton` (con `ButtonGroup`) | Selección del estado del recurso. Se eligió por tratarse de opciones mutuamente excluyentes: un recurso no puede estar Disponible y En reparación a la vez. El `ButtonGroup` garantiza esa exclusividad y asegura que siempre haya una opción seleccionada. |
+| `JSpinner` | Ingreso del plazo de préstamo. Configurado con un `SpinnerNumberModel` de 1 a 15, restringe el rango desde el propio componente, antes de que el dato llegue a la validación. |
+| `JTextArea` | Registro de observaciones. Se eligió sobre `JTextField` porque el texto es de extensión variable y multilínea; está contenido en un `JScrollPane` para que el contenido extenso siga siendo accesible. |
+
+El total asciende a **ocho tipos de componentes** con uso funcional.
 
 ## Organización de paquetes y recorrido de una operación
 
 | Paquete o carpeta | Responsabilidad |
-| --- | --- |
 | [app](src/main/java/app) | Iniciar la aplicación y conectar los objetos. |
 | [modelo](src/main/java/modelo) | Representar los registros y, al completar el proyecto, sus reglas. |
 | [vista](src/main/java/vista) | Mostrar la interfaz Swing y los mensajes. |
