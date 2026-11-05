@@ -1,20 +1,29 @@
 [
   {
     "identificador": 1,
-    "nombre": "Registro de ejemplo A",
-    "categoria": "General",
-    "activo": true
+    "nombre": "Notebook de ejemplo 01",
+    "categoria": "Notebook",
+    "activo": true,
+    "estado": "Disponible",
+    "diasPrestamo": 1,
+    "observaciones": "Recurso ficticio para demostración."
   },
   {
     "identificador": 2,
-    "nombre": "Registro de ejemplo B",
-    "categoria": "Materiales",
-    "activo": false
+    "nombre": "Proyector de ejemplo 02",
+    "categoria": "Proyector",
+    "activo": false,
+    "estado": "En reparación",
+    "diasPrestamo": 1,
+    "observaciones": "Ejemplo ficticio: revisión de la lámpara."
   },
   {
-    "identificador": 3,
-    "nombre": "Registro de ejemplo C",
-    "categoria": "Servicios",
-    "activo": true
+    "identificador": 10,
+    "nombre": "Notebook Mateo Purebas",
+    "categoria": "Notebook",
+    "activo": true,
+    "estado": "En reparación",
+    "diasPrestamo": 1,
+    "observaciones": "Mother Rota"
   }
 ]
