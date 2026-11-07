@@ -1,29 +1,38 @@
 [
   {
     "identificador": 1,
-    "nombre": "Notebook de ejemplo 01",
+    "nombre": "Notebook 01",
     "categoria": "Notebook",
     "activo": true,
     "estado": "Disponible",
     "diasPrestamo": 1,
-    "observaciones": "Recurso ficticio para demostración."
+    "observaciones": "Incluye cargador y funda."
   },
   {
     "identificador": 2,
-    "nombre": "Proyector de ejemplo 02",
+    "nombre": "Proyector 01",
     "categoria": "Proyector",
-    "activo": false,
-    "estado": "En reparación",
-    "diasPrestamo": 1,
-    "observaciones": "Ejemplo ficticio: revisión de la lámpara."
+    "activo": true,
+    "estado": "Prestado",
+    "diasPrestamo": 7,
+    "observaciones": "Asignado a la feria de ciencias."
   },
   {
-    "identificador": 10,
-    "nombre": "Notebook Mateo Purebas",
-    "categoria": "Notebook",
+    "identificador": 3,
+    "nombre": "Kit de robótica 01",
+    "categoria": "Kit de robótica",
     "activo": true,
     "estado": "En reparación",
     "diasPrestamo": 1,
-    "observaciones": "Mother Rota"
+    "observaciones": "Falta un sensor de distancia."
+  },
+  {
+    "identificador": 4,
+    "nombre": "Aula de Informática",
+    "categoria": "Aula",
+    "activo": true,
+    "estado": "Disponible",
+    "diasPrestamo": 1,
+    "observaciones": "Capacidad para 24 estudiantes."
   }
 ]

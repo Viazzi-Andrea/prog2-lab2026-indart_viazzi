@@ -2,57 +2,45 @@
 
 Trabajo de Programación 2 del CeRP del Suroeste, modalidad semipresencial.
 Docente: Domingo Pérez. Año: 2026.
+**Repositorio:** https://github.com/Viazzi-Andrea/prog2-lab2026-indart_viazzi
 
 ## Integrantes
 
 - Mateo Indart Vega.
 - Andrea Viazzi Moreira.
 
+---
 
-## Estado del proyecto
-
-Partimos del prototipo docente de un gestor de registros en Java y Swing,
-organizado con MVC, fachada y persistencia en JSON.
-
-**Actualmente solo está disponible el prototipo.** La ventana muestra tres
-registros de ejemplo del archivo JSON. Los botones Registrar, Modificar,
-Eliminar, Buscar, Limpiar y Guardar muestran un aviso de funcionalidad pendiente.
-Seleccionar una fila todavía no carga sus datos en el formulario.
-
-Los apartados marcados como **Pendiente** deben completarse con nuestro
-desarrollo real antes de entregar. La [consigna del laboratorio](docs/letra.md)
-detalla los requisitos.
-
-## Problema y destinatarios
+## 1. Problema y destinatarios
 
 En un centro de educación media, el aula de informática concentra equipamiento que se comparte entre muchos docentes y grupos: notebooks, proyectores y kits de robótica, además del propio espacio del aula.
 
-La gestión de ese equipamiento suele resolverse de manera informal: un cuaderno en la puerta, un mensaje al referente del aula o un acuerdo verbal entre colegas.
-Ese mecanismo produce cuatro problemas recurrentes:
+La gestión de ese equipamiento suele resolverse de manera informal: un cuaderno en la puerta, un mensaje al referente del aula o un acuerdo verbal entre colegas. Ese mecanismo produce cuatro problemas recurrentes:
 
 - No se sabe con certeza qué recursos están disponibles en un momento dado.
 - No queda registro de qué equipo salió, ni desde cuándo.
 - Un equipo que se rompió sigue figurando como prestable hasta que alguien avisa.
 - El aula se superpone entre grupos porque no hay un único lugar donde consultarlo.
 
-**Destinatario directo:** el docente referente o encargado del aula de
-informática, que es quien administra el inventario y autoriza los préstamos.
+**Destinatario directo:** el docente referente o encargado del aula de informática, que administra el inventario y autoriza los préstamos.
 
-**Destinatarios indirectos:** los docentes que solicitan equipamiento para sus
-clases y el equipo de dirección, que necesita conocer el estado del inventario
-para planificar reparaciones y reposiciones.
+**Destinatarios indirectos:** los docentes que solicitan equipamiento para sus clases y el equipo de dirección, que necesita conocer el estado del inventario para planificar reparaciones y reposiciones.
 
-## Utilidad de la solución
+---
 
-La aplicación reemplaza el registro informal por un inventario único y consultable, y aporta concretamente lo siguiente:
+## 2. Utilidad de la solución
+
+La aplicación reemplaza el registro informal por un inventario único y consultable:
 
 - **Estado explícito de cada recurso.** Cada equipo indica si está Disponible, Prestado o En reparación, de modo que la consulta no depende de la memoria de quien atiende.
-- **Préstamos acotados en el tiempo.** El plazo se registra en días, con un máximo definido, lo que evita los préstamos indefinidos que en la práctica terminan en equipos extraviados.
-- **Trazabilidad del deterioro.** El campo de observaciones permite anotar roturas, faltantes o condiciones particulares de cada recurso, información que en el registro en papel se pierde.
+- **Préstamos acotados en el tiempo.** El plazo se registra en días, con un máximo definido, lo que evita los préstamos indefinidos que terminan en equipos extraviados.
+- **Trazabilidad del deterioro.** El campo de observaciones permite anotar roturas, faltantes o condiciones particulares, información que en el registro en papel se pierde.
 - **Conservación entre sesiones.** Los datos se guardan en un archivo JSON y se recuperan al volver a abrir la aplicación.
 - **Funcionamiento autónomo.** No requiere conexión a internet, servidor ni base de datos: se ejecuta en la propia computadora del aula, condición necesaria en centros con conectividad intermitente.
 
-## Adaptación del modelo y reglas
+---
+
+## 3. Adaptación del modelo y reglas
 
 El prototipo entregado gestionaba registros genéricos con cuatro atributos. La adaptación consistió en reinterpretar esos atributos y agregar tres propios del problema.
 
@@ -82,214 +70,177 @@ trata el espacio físico como un recurso más del inventario. De ese modo, reser
 
 1. **Nombre obligatorio.** No se admite un recurso sin denominación, porque el listado quedaría inutilizable.
 2. **Identificador único.** No se permite registrar dos recursos con el mismo número de inventario.
-3. **Un recurso en reparación no puede prestarse.** Esta es la regla propia del problema: evita asignar equipamiento que no está en condiciones de uso.
-4. **Plazo acotado.** El préstamo debe ubicarse entre 1 y 15 días.
+3. **Un recurso en reparación no puede pasar a prestado.** Esta es la regla propia del problema: evita asignar equipamiento que no está en condiciones de uso.
+4. **Plazo acotado entre 1 y 15 días.** Se controla en el modelo y además se restringe desde el componente de la interfaz.
 
 ---
 
-## Componentes gráficos
+## 4. Componentes gráficos
 
-La base incluye JTextField, JComboBox, JCheckBox, JButton y JTable. El equipo agregó tres tipos más, todos con
-incidencia real sobre los datos.
+El prototipo incluía cinco tipos: `JTextField`, `JComboBox`, `JCheckBox`, `JButton` y `JTable`. El equipo agregó tres tipos más, todos con incidencia real sobre los datos.
 
-Los tres tipos nuevos todavía no fueron elegidos ni implementados:
-
-| Componente | Función en el sistema 
-| `JRadioButton` (con `ButtonGroup`) | Selección del estado del recurso. Se eligió por tratarse de opciones mutuamente excluyentes: un recurso no puede estar Disponible y En reparación a la vez. El `ButtonGroup` garantiza esa exclusividad y asegura que siempre haya una opción seleccionada. |
+| Componente | Función en el sistema |
+| `JRadioButton` con `ButtonGroup` | Selección del estado del recurso. Se eligió por tratarse de opciones mutuamente excluyentes: un recurso no puede estar Disponible y En reparación a la vez. El `ButtonGroup` garantiza esa exclusividad y asegura que siempre haya una opción seleccionada. |
 | `JSpinner` | Ingreso del plazo de préstamo. Configurado con un `SpinnerNumberModel` de 1 a 15, restringe el rango desde el propio componente, antes de que el dato llegue a la validación. |
 | `JTextArea` | Registro de observaciones. Se eligió sobre `JTextField` porque el texto es de extensión variable y multilínea; está contenido en un `JScrollPane` para que el contenido extenso siga siendo accesible. |
 
 El total asciende a **ocho tipos de componentes** con uso funcional.
 
-## Organización de paquetes y recorrido de una operación
+---
+
+## 5. Organización de paquetes y recorrido de una operación
 
 | Paquete o carpeta | Responsabilidad |
-| [app](src/main/java/app) | Iniciar la aplicación y conectar los objetos. |
-| [modelo](src/main/java/modelo) | Representar los registros y, al completar el proyecto, sus reglas. |
-| [vista](src/main/java/vista) | Mostrar la interfaz Swing y los mensajes. |
-| [controlador](src/main/java/controlador) | Recibir eventos y coordinar las acciones mediante la fachada. |
-| [fachada](src/main/java/fachada) | Ofrecer operaciones y coordinar el modelo con la persistencia. |
-| [persistencia](src/main/java/persistencia) | Leer y escribir JSON, sin depender de Swing. |
-| [datos](datos) | Contener el archivo JSON; no es un paquete Java. |
+| --- | --- |
+| [app](src/main/java/app) | Inicia la aplicación, instala el Look and Feel y conecta los objetos entre sí. |
+| [modelo](src/main/java/modelo) | La clase `Registro` representa un recurso del aula y valida sus propios datos. |
+| [vista](src/main/java/vista) | `VentanaPrincipal` presenta la interfaz Swing, recoge lo que ingresa el usuario y muestra los mensajes. |
+| [controlador](src/main/java/controlador) | `ControladorRegistros` recibe los eventos de los botones y de la tabla, y coordina las operaciones mediante la fachada. |
+| [fachada](src/main/java/fachada) | `FachadaRegistros` ofrece las operaciones del sistema y aplica las reglas que involucran a más de un registro. |
+| [persistencia](src/main/java/persistencia) | `PersistenciaRegistros` lee y escribe el archivo JSON, sin depender de Swing. |
+| [datos](datos) | Carpeta, no paquete Java: contiene `registros.json`. |
 
-El recorrido que ya funciona es la carga inicial:
-[Aplicacion](src/main/java/app/Aplicacion.java) conecta los objetos;
-el controlador solicita la carga a la fachada; la fachada utiliza la
-persistencia para leer el archivo; y el controlador entrega los registros a la
-vista para mostrarlos en la tabla. La vista no lee ni escribe archivos.
+La vista no lee ni escribe archivos y no decide reglas de negocio. Entrega y recibe datos simples (`String`, `int`, `boolean`) y nunca objetos `Registro`, salvo en `mostrarRegistros`, que únicamente los vuelca en la tabla. Esa separación permitió que los dos integrantes desarrollaran su parte en paralelo acordando previamente las firmas de los métodos.
 
-**Pendiente de documentar:** el recorrido completo de una operación de gestión
-implementada por nuestro equipo.
+### Recorrido de una operación: registrar un equipo
 
-## Instrucciones de ejecución
+1. **Vista.** El usuario completa el formulario y presiona *Registrar*.
+2. **Controlador.** El listener invoca `registrar()`. `leerIdentificador()` toma el texto de `vista.getIdentificador()` y lo convierte a entero; si no es un número, informa el error sin continuar. `leerFormulario()` construye un `Registro` con el resto de los datos que pide a la vista.
+3. **Modelo.** El constructor de `Registro` valida sus propios datos: nombre no vacío, identificador positivo, categoría y estado dentro de los valores admitidos y plazo entre 1 y 15 días. Ante un dato inválido lanza `IllegalArgumentException`.
+4. **Fachada.** `registrar()` comprueba que el identificador no exista, arma una lista actualizada y la entrega a `confirmarCambios()`.
+5. **Persistencia.** `escribir()` serializa la lista con Gson en un archivo temporal y recién entonces lo mueve sobre el original mediante un movimiento atómico. Si la escritura falla, el archivo anterior queda intacto.
+6. **Regreso.** La lista en memoria se reemplaza solo si la escritura terminó correctamente. El controlador ejecuta `terminarOperacion()`, que actualiza la tabla, limpia el formulario y muestra la confirmación.
+7. **Ante un error** en cualquier punto, el controlador captura la excepción y pide a la vista que muestre el mensaje. La aplicación no se cierra y el usuario puede corregir.
+
+---
 
 ### Requisitos
 
-- JDK 25 LTS o superior, con `JAVA_HOME` apuntando al JDK y su carpeta `bin`
-  en el `PATH`, para disponer de los comandos `java` y `javac`.
-- Windows, macOS o Linux con un entorno gráfico para mostrar Swing.
-- Git, si se descarga el proyecto mediante clonación.
-- Conexión a Internet en la primera ejecución para descargar Maven y las
-  dependencias. La aplicación utiliza un archivo local, sin base de datos ni
-  conexión a Internet durante su uso.
+- **JDK 25 o superior**, con `JAVA_HOME` apuntando al JDK. El proyecto se desarrolló y probó con Eclipse Temurin 25 en Windows.
+- Un entorno gráfico, porque la interfaz es Swing.
+- No es necesario instalar Maven: el repositorio incluye **Maven Wrapper**.
+- Conexión a internet únicamente en la primera ejecución, para descargar Maven y las dependencias. La aplicación en uso no requiere conexión.
 
-No es necesario instalar Maven ni agregarlo al `PATH`: el repositorio incluye
-Maven Wrapper, que descarga y utiliza Maven 3.9.11 automáticamente.
-La compilación genera clases para Java 25; no se pueden ejecutar con Java 17
-ni Java 21. Maven Wrapper utiliza el JDK indicado por `JAVA_HOME`.
-
-Después de instalar o cambiar el JDK, reiniciar la terminal y VS Code.
-Comprobar que `java -version`, `javac -version` y `.\mvnw.cmd -version`
-(Windows) o `sh mvnw -version` (macOS y Linux) indiquen Java 25 o superior.
+Para comprobar la instalación, `java -version` y `javac -version` deben indicar Java 25 o superior.
 
 ### Descargar el proyecto
 
-**Pendiente:** reemplazar `USUARIO` y `REPOSITORIO` por los datos del repositorio
-del equipo antes de entregar.
-
 ```text
-git clone https://github.com/USUARIO/REPOSITORIO.git
-cd REPOSITORIO
+git clone https://github.com/Viazzi-Andrea/prog2-lab2026-indart_viazzi.git
+cd prog2-lab2026-indart_viazzi
 ```
 
-El nombre del repositorio debe seguir el formato indicado en la consigna:
-`prog2-lab2026-apellido1_apellido2`.
+### Ejecutar
 
-Ejecutar los siguientes comandos desde la raíz del proyecto, donde se
-encuentra [pom.xml](pom.xml).
+Desde la raíz del proyecto, donde está `pom.xml`.
 
-### Windows: PowerShell
+**Windows, PowerShell**
 
 ```powershell
 .\mvnw.cmd compile exec:java
 ```
 
-Para compilar sin abrir la ventana:
-
-```powershell
-.\mvnw.cmd compile
-```
-
-Si aparece «mvn no se reconoce», utilizar `.\mvnw.cmd` como en los comandos
-anteriores. El prefijo `.\` indica a PowerShell que ejecute el lanzador de la
-carpeta actual.
-
-### macOS y Linux: terminal
+**macOS y Linux**
 
 ```sh
 sh mvnw compile exec:java
 ```
 
-Para compilar sin abrir la ventana:
+Si se modificó `pom.xml`, conviene agregar `clean`:
 
-```sh
-sh mvnw compile
+```powershell
+.\mvnw.cmd clean compile exec:java
 ```
 
-Al utilizar `sh mvnw` no es necesario cambiar los permisos del archivo.
-En Linux se requiere una sesión de escritorio; una terminal de servidor sin
-entorno gráfico no puede mostrar la ventana.
+### Dependencias
 
-### VS Code y dependencias
+| Librería | Versión | Para qué | Origen |
+| --- | --- | --- | --- |
+| Gson | 2.13.2 | Lectura y escritura del archivo JSON. | Venía con el prototipo. |
+| FlatLaf | 3.5.4 | Look and Feel de la interfaz. | Agregada por el equipo. |
+| Swing | Incluido en Java | Componentes de la interfaz gráfica. | Venía con el prototipo. |
 
-Abrir la carpeta raíz con Extension Pack for Java instalado e importar el
-proyecto Maven. También se puede ejecutar el método `main` de
-[Aplicacion](src/main/java/app/Aplicacion.java), con la raíz del proyecto como
-directorio de trabajo.
-En `Java: Configure Java Runtime`, seleccionar un JDK 25 para este proyecto.
-La configuración local de VS Code selecciona el JDK 25 instalado en
-`%USERPROFILE%\.jdks\jdk-25.0.4.1+1` para las terminales de Windows y el
-proyecto Java, sin modificar el `PATH` del sistema. Si se utiliza otra
-instalación, ajustar las rutas en `.vscode/settings.json`.
-
-La biblioteca de persistencia es Gson 2.13.2. Está declarada, junto con los
-complementos de compilación y ejecución, en [pom.xml](pom.xml).
+Ambas dependencias externas están declaradas en [pom.xml](pom.xml) y Maven las descarga automáticamente.
 
 ### Archivo de datos
 
-El archivo de ejemplo es [datos/registros.json](datos/registros.json).
-La ruta es relativa al directorio desde el cual se inicia la aplicación.
+El archivo es [datos/registros.json](datos/registros.json) y contiene cuatro equipos de ejemplo, ficticios y sin datos personales reales. La ruta es relativa al directorio desde el cual se inicia la aplicación.
 
-Si el archivo no existe, la aplicación inicia con una lista vacía. Si es
-inválido o ilegible, muestra un error y mantiene la ventana abierta sin
-reemplazarlo. La fachada bloquea el guardado cuando la carga no fue correcta.
-Los errores de escritura se propagan al controlador; falta integrar el guardado
-y sus mensajes con las operaciones del equipo.
+Si el archivo no existe, la aplicación inicia con el listado vacío y lo crea al guardar el primer equipo. Si es inválido, muestra un error, mantiene la ventana abierta, no lo reemplaza y bloquea el guardado posterior.
 
-**En el estado actual, ningún botón guarda datos y cerrar la ventana tampoco
-guarda.**
+---
 
-## Pruebas realizadas y limitaciones conocidas
+## 7. Pruebas realizadas y limitaciones conocidas
 
-### Comprobaciones heredadas del prototipo
-
-La base fue verificada en Windows con OpenJDK 17.0.17 y Maven 3.9.11.
-Es compatible por diseño con macOS y Linux, pero su ejecución en esos sistemas
-todavía no fue comprobada.
-
-Tras actualizar a Java 25 LTS, se verificó en Windows con Eclipse Temurin
-25.0.4.1 y Maven 3.9.11 la compilación limpia mediante `.\mvnw.cmd clean verify`.
-También se comprobaron la carga de los tres registros de ejemplo, la lectura
-sin archivo, la escritura y lectura JSON con tildes, la copia del listado,
-el rechazo de JSON inválido y el bloqueo del guardado tras una carga fallida.
-No hay pruebas automatizadas en el repositorio; estas comprobaciones se
-realizaron con un programa temporal. La interfaz gráfica no se volvió a
-verificar como parte de esta actualización.
-
-| Acción | Resultado esperado | Resultado obtenido en la base |
-| --- | --- | --- |
-| Compilar mediante Maven Wrapper en Windows. | Compilación sin errores. | Correcto. |
-| Abrir la aplicación desde la raíz. | Mostrar los tres registros del JSON. | Correcto. |
-| Pulsar los seis botones. | Mostrar avisos de funcionalidad pendiente sin modificar datos. | Correcto. |
-| Iniciar sin JSON, con una ruta de prueba. | Mostrar la tabla vacía sin crear el archivo. | Correcto. |
-| Iniciar con JSON inválido, usando una copia de prueba. | Informar el error sin cerrar la ventana ni modificar el archivo. | Correcto. |
-| Leer y escribir registros en un archivo temporal. | Recuperar todos los atributos, incluidos caracteres con tildes. | Correcto. |
-| Guardar desde la fachada tras una carga fallida. | Rechazar el guardado sin reemplazar el archivo. | Correcto. |
-
-### Pruebas de nuestro desarrollo
-
-**Pendiente:** realizar estas pruebas y reemplazar los resultados por lo
-realmente observado. No se consideran aprobadas por estar incluidas en la tabla.
+Las siguientes pruebas se ejecutaron sobre la versión final, el 7 de noviembre de 2026, en Windows con Eclipse Temurin 25.
 
 | Acción | Resultado esperado | Resultado obtenido |
 | --- | --- | --- |
-| Crear un registro válido. | Aparece en el listado con identificador único. | Pendiente: alta sin implementar. |
-| Incumplir la primera validación. | Informar el motivo y permitir corregir. | Pendiente: validación sin implementar. |
-| Incumplir la segunda validación. | Informar el motivo y permitir corregir. | Pendiente: validación sin implementar. |
-| Incumplir la regla propia del problema. | Rechazar la operación y explicar el motivo. | Pendiente: regla sin implementar. |
-| Modificar un registro seleccionado. | Actualizarlo conservando su identificador, sin duplicarlo. | Pendiente: modificación sin implementar. |
-| Cancelar una eliminación y confirmar otra con un registro de prueba. | Conservar el primero y eliminar solo el confirmado. | Pendiente: eliminación sin implementar. |
-| Aplicar una búsqueda o filtro. | Mostrar únicamente los registros que cumplen el criterio. | Pendiente: búsqueda sin implementar. |
-| Limpiar el formulario. | Dejarlo preparado para una nueva operación. | Pendiente: limpieza sin implementar. |
-| Crear y modificar datos, guardar, cerrar y volver a abrir. | Recuperar los cambios desde el JSON. | Pendiente: guardado sin integrar. |
-| Iniciar sin JSON y con JSON inválido, usando copias de prueba. | Mantener el manejo de errores de la base. | Pendiente: volver a comprobar tras nuestros cambios. |
+| Registrar un equipo válido con todos sus datos. | Aparece en el listado y el formulario se limpia. | Correcto. Se registró y apareció en el listado. |
+| Registrar dejando el nombre vacío. | Informar el motivo sin cerrar la aplicación. | Correcto. Se mostró "El nombre no puede quedar vacío." y la aplicación siguió funcionando. |
+| Registrar con un identificador que ya existe. | Rechazar la operación e informar el motivo. | Correcto. Se mostró "Ya existe un equipo con ese identificador." y no se creó el duplicado. |
+| Intentar pasar a Prestado un equipo En reparación (regla propia). | Rechazar la operación y explicar el motivo. | Correcto. Se mostró "No se puede prestar un equipo en reparación." y el equipo conservó su estado anterior. |
+| Modificar las observaciones de un registro seleccionado. | Actualizarlo conservando su identificador, sin duplicarlo. | Correcto. Se actualizó la observación, conservó el identificador y no se generó un duplicado. |
+| Cancelar una eliminación. | No eliminar el registro. | Correcto. El registro permaneció en el listado. |
+| Confirmar la eliminación de otro registro. | Eliminarlo del listado y guardar el cambio. | Correcto. El registro se eliminó y el cambio se guardó. |
+| Buscar por texto y luego limpiar. | Mostrar solo las coincidencias y después el listado completo. | Correcto. El filtro mostró únicamente los registros coincidentes en nombre o categoría, y al limpiar se restableció el listado. |
+| Crear, modificar y eliminar; cerrar y volver a abrir. | Recuperar los cambios desde el JSON. | Correcto. Al reiniciar se recuperaron el registro creado, la modificación y la eliminación. |
+| Iniciar sin archivo JSON, usando una copia de prueba. | Iniciar con el listado vacío y crear el archivo al guardar. | Correcto. Inició vacío y sin errores; al registrar el primer equipo se creó nuevamente el archivo. |
+| Iniciar con un JSON inválido, usando una copia de prueba. | Informar el error sin cerrar la ventana ni sobrescribir el archivo. | Correcto. Informó el problema, bloqueó el guardado posterior y conservó el archivo sin sobrescribirlo. |
 
-Las limitaciones actuales son las funciones pendientes descritas en este
-documento. **Pendiente:** actualizar esta sección con las limitaciones reales
-de nuestra entrega.
+### Limitaciones conocidas
 
-## Procedencia del código y recursos utilizados
+- **Aplicación monousuario.** No está prevista para que dos personas trabajen sobre el mismo archivo al mismo tiempo.
+- **El identificador lo ingresa el usuario.** El sistema verifica que no se repita, pero no lo genera automáticamente.
+- **El plazo se guarda en días, no en fechas.** No se registra la fecha de inicio ni la de vencimiento, de modo que el sistema no puede avisar de préstamos vencidos.
+- **No se registra quién retira el equipo.** Ese dato puede anotarse en observaciones, pero no es un campo propio ni es consultable.
+- **El botón Guardar reescribe el listado actual** y no incorpora lo que esté cargado en el formulario; para eso están Registrar y Modificar.
+- **La validación del plazo no puede incumplirse desde la interfaz**, porque el `JSpinner` ya restringe el rango de 1 a 15. La regla igualmente existe en el modelo, de modo que los datos provenientes del archivo JSON también quedan validados.
+- **La ejecución se comprobó únicamente en Windows.** El proyecto es compatible por diseño con macOS y Linux, pero no fue verificado en esos sistemas.
 
-- **Base docente:** estructura MVC con fachada, modelo genérico, ventana inicial,
-  avisos de funcionalidad pendiente, carga de ejemplo, infraestructura JSON y
-  configuración Maven con Wrapper.
-- **Trabajo de nuestro equipo:** pendiente de implementar y detallar,
-  identificando qué agregamos y qué modificamos.
-- **Bibliotecas:** Gson 2.13.2 para leer y escribir JSON; Swing, incluido en Java,
-  para la interfaz.
-- **Tutoriales, documentación y herramientas de IA utilizados por el equipo:**
-  pendiente de declarar. Indicar los recursos, su uso concreto y las partes
-  correspondientes, o aclarar si no se utilizaron.
+---
 
-## Aportes de cada integrante
+## 8. Procedencia del código y recursos utilizados
+
+### Qué proviene del prototipo
+
+Estructura de paquetes MVC con fachada, configuración Maven con Wrapper, infraestructura de lectura y escritura JSON con Gson, la clase `Registro` con sus cuatro atributos originales, los métodos `cargarDatos`, `listarRegistros` y `guardarDatos` de la fachada, la ventana con los cinco tipos de componentes iniciales y los avisos de funcionalidad pendiente en los botones.
+
+### Qué implementó el equipo
+
+- Los tres atributos nuevos del modelo con sus validaciones.
+- Las cuatro reglas de validación y el manejo de errores mediante excepciones.
+- Las operaciones `registrar`, `modificar`, `eliminar`, `buscarPorId` y `filtrar` de la fachada.
+- El guardado en dos pasos mediante archivo temporal y la lectura defensiva del JSON.
+- El controlador completo, con el cableado de los seis botones y de la selección en la tabla.
+- Los tres componentes nuevos de la vista, el rediseño del formulario con `GridBagLayout`, las siete columnas de la tabla y los trece métodos que la vista expone al controlador.
+- La incorporación de FlatLaf como Look and Feel.
+
+### Bibliotecas
+
+Gson 2.13.2 y FlatLaf 3.5.4, ambas declaradas en `pom.xml`. Swing forma parte de la biblioteca estándar de Java.
+
+### Documentación y herramientas de IA
+
+- Documentación oficial de Swing (Oracle) para el uso de `GridBagLayout`, `JSpinner` y `ButtonGroup`.
+- [refactoring.guru](https://refactoring.guru/es/design-patterns/facade) para comprender el patrón Fachada.
+- Documentación de FlatLaf para su instalación y configuración.
+- El equipo utilizó asistentes de IA (Claude y ChatGPT) como apoyo durante el desarrollo, en un trabajo diseñado, integrado y probado por nosotros. Los usos concretos fueron: consultar el funcionamiento de componentes y gestores de disposición de Swing y contrastar alternativas de diseño, por ejemplo por qué GridBagLayout resulta más adecuado que GridLayout para un formulario con filas de distinta altura; revisar fragmentos de código que luego fueron integrados, compilados y verificados; definir por anticipado el contrato de métodos entre la vista y el controlador, lo que permitió a los dos integrantes trabajar en paralelo sin bloquearse; redactar los comentarios explicativos del código; apoyar el uso de Git desde la terminal; y redactar esta documentación. Las decisiones de diseño y el funcionamiento del código pueden explicarse en detalle.
+
+Adicionalmente, los constructores y parte de la estructura de clases del backend se adaptaron a partir de un programa anterior de uno de los integrantes, ajustado a los atributos, las categorías y las reglas de este laboratorio.
+
+---
+
+## 9. Aportes de cada integrante
 
 | Integrante | Aportes realizados |
 | --- | --- |
-| Pendiente: primer integrante. | Pendiente de registrar aportes concretos. |
-| Pendiente: segundo integrante. | Pendiente de registrar aportes concretos. |
+| Mateo Indart Vega | Modelo (`Registro` con sus atributos nuevos y validaciones), fachada (`registrar`, `modificar`, `eliminar`, `buscarPorId`, `filtrar` y el guardado en dos pasos), persistencia (lectura defensiva del JSON y escritura mediante archivo temporal) y controlador completo. Clases de comprobación del backend en `src/test/java/pruebas`. |
+| Andrea Viazzi Moreira | Vista completa: los tres componentes nuevos, el rediseño del formulario con `GridBagLayout`, las siete columnas de la tabla, los trece métodos de contacto con el controlador y la incorporación de FlatLaf. Documento de acuerdos del equipo, este README, la batería de pruebas funcionales y el guion y montaje del video. |
 
-Agregar una tercera fila solamente si corresponde. Todos los integrantes deben
-conocer la solución completa y participar en el video.
+Ambos integrantes conocen la solución completa y participan en el video explicando su aporte.
+
+---
 
 ## Video explicativo
 
