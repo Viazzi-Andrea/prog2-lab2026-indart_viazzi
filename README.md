@@ -47,6 +47,7 @@ El prototipo entregado gestionaba registros genéricos con cuatro atributos. La 
 ### Reinterpretación de los atributos del prototipo
 
 | Atributo del prototipo | Significado en este sistema |
+| --- | --- |
 | `identificador` | Número de inventario del recurso. Único y no reutilizable. |
 | `nombre` | Denominación del recurso (por ejemplo, "Notebook Lenovo 03"). |
 | `categoria` | Tipo de recurso. |
@@ -55,6 +56,7 @@ El prototipo entregado gestionaba registros genéricos con cuatro atributos. La 
 ### Atributos agregados por el equipo
 
 | Atributo | Tipo | Función |
+| --- | --- | --- |
 | `estado` | `String` | Situación actual del recurso: Disponible, Prestado o En reparación. |
 | `diasPrestamo` | `int` | Plazo del préstamo, acotado entre 1 y 15 días. |
 | `observaciones` | `String` | Texto libre para registrar roturas, faltantes o condiciones de uso. |
@@ -80,6 +82,7 @@ trata el espacio físico como un recurso más del inventario. De ese modo, reser
 El prototipo incluía cinco tipos: `JTextField`, `JComboBox`, `JCheckBox`, `JButton` y `JTable`. El equipo agregó tres tipos más, todos con incidencia real sobre los datos.
 
 | Componente | Función en el sistema |
+| --- | --- |
 | `JRadioButton` con `ButtonGroup` | Selección del estado del recurso. Se eligió por tratarse de opciones mutuamente excluyentes: un recurso no puede estar Disponible y En reparación a la vez. El `ButtonGroup` garantiza esa exclusividad y asegura que siempre haya una opción seleccionada. |
 | `JSpinner` | Ingreso del plazo de préstamo. Configurado con un `SpinnerNumberModel` de 1 a 15, restringe el rango desde el propio componente, antes de que el dato llegue a la validación. |
 | `JTextArea` | Registro de observaciones. Se eligió sobre `JTextField` porque el texto es de extensión variable y multilínea; está contenido en un `JScrollPane` para que el contenido extenso siga siendo accesible. |
@@ -114,6 +117,7 @@ La vista no lee ni escribe archivos y no decide reglas de negocio. Entrega y rec
 
 ---
 
+## 6. Instrucciones de ejecución, versión de Java y dependencias
 ### Requisitos
 
 - **JDK 25 o superior**, con `JAVA_HOME` apuntando al JDK. El proyecto se desarrolló y probó con Eclipse Temurin 25 en Windows.
@@ -242,16 +246,10 @@ Ambos integrantes conocen la solución completa y participan en el video explica
 
 ---
 
-## Video explicativo
+## 10. Video explicativo
 
-**Pendiente de crear y publicar. No hay un video disponible todavía.**
+**Enlace público:** PENDIENTE DE COMPLETAR
 
-Enlace público: **pendiente de agregar**.
+Duración: menos de cinco minutos. Participan los dos integrantes con su voz. El video presenta el problema y la solución, demuestra las funciones principales y una validación, identifica los tres componentes nuevos, explica el recorrido de una operación por MVC, fachada y persistencia, y muestra que los datos se conservan al cerrar y volver a abrir la aplicación.
 
-El video debe durar como máximo cinco minutos, incluir la participación de todos
-los integrantes y mostrar el problema, la aplicación, una validación, los tres
-componentes nuevos, el recorrido de una operación y la conservación de datos.
-
-Lo alojaremos en una plataforma externa, sin subir el archivo al repositorio.
-Antes de entregar, comprobaremos que el enlace permita verlo desde una ventana
-privada, sin iniciar sesión ni solicitar permisos.
+El archivo no se subió al repositorio. El enlace está configurado para verse sin iniciar sesión ni solicitar permisos.
