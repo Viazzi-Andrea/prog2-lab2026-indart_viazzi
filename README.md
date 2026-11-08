@@ -248,8 +248,8 @@ Ambos integrantes conocen la solución completa y participan en el video explica
 
 ## 10. Video explicativo
 
-**Enlace público:** PENDIENTE DE COMPLETAR
+**Enlace público:** (https://drive.google.com/file/d/1EhahMUazMylVRT5WsR7D5_Pgf8DSkrvO/view?usp=sharing)
 
-Duración: menos de cinco minutos. Participan los dos integrantes con su voz. El video presenta el problema y la solución, demuestra las funciones principales y una validación, identifica los tres componentes nuevos, explica el recorrido de una operación por MVC, fachada y persistencia, y muestra que los datos se conservan al cerrar y volver a abrir la aplicación.
+Duración: 4:09 minutos. Participan los dos integrantes con su voz. El video presenta el problema y la solución, demuestra las funciones principales y una validación, identifica los tres componentes nuevos, explica el recorrido de una operación por MVC, fachada y persistencia, y muestra que los datos se conservan al cerrar y volver a abrir la aplicación.
 
 El archivo no se subió al repositorio. El enlace está configurado para verse sin iniciar sesión ni solicitar permisos.
